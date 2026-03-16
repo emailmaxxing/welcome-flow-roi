@@ -1,301 +1,479 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
 <meta charset="UTF-8">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email Funnel ROI Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-
 <style>
-
-
-body {
-
-display:flex;
-justify-content:center;
-background:#E1EDF5;
-margin:0;
-
-font-family:Inter;
-
-}
-
-
-/* Desktop | Tablet | Mobile */
-
-.desktop {
-
-display:flex;
-flex-direction:row;
-align-items:flex-start;
-gap:30px;
-
-position:relative;
-
-width:1280px;
-height:1187px;
-
-background:#E1EDF5;
-
-}
-
-
-/* Frame */
-
-.frame {
-
-display:flex;
-flex-direction:column;
-align-items:center;
-
-padding:100px 200px;
-gap:30px;
-
-width:1280px;
-height:1187px;
-
-background:rgba(255,255,255,0.1);
-
-backdrop-filter:blur(10px);
-
-}
-
-
-/* Headline */
-
-.headline {
-
-width:880px;
-height:120px;
-
-font-size:60px;
-font-weight:400;
-
-line-height:100%;
-
-text-align:center;
-
-letter-spacing:-0.05em;
-
-color:black;
-
-}
-
-
-/* Card */
-
-.card {
-
-display:flex;
-flex-direction:column;
-
-padding:20px;
-gap:20px;
-
-width:650px;
-max-width:650px;
-height:auto; /* Changed to auto to fit the result text */
-min-height:292px;
-
-background:rgba(255,255,255,0.1);
-
-border:3px solid white;
-
-border-radius:20px;
-
-box-shadow:0 0 500px rgba(0,0,0,0.25);
-
-}
-
-
-/* Title row */
-
-.titleRow {
-
-display:flex;
-flex-direction:row;
-
-gap:5px;
-
-align-items:center;
-
-height:15px;
-
-}
-
-
-/* Title */
-
-.title {
-
-font-size:15px;
-font-weight:700;
-letter-spacing:-0.05em;
-
-}
-
-
-/* Input block */
-
-.inputBlock {
-
-display:flex;
-flex-direction:column;
-
-gap:5px;
-
-width:610px;
-
-}
-
-
-.label {
-
-font-size:20px;
-
-}
-
-
-.inputWrap {
-
-display:flex;
-align-items:center;
-
-padding:15px;
-
-background:#EEEEEE;
-
-border:1px solid #8E8E8E;
-
-border-radius:5px;
-
-height:50px;
-
-}
-
-
-.inputWrap input {
-
-border:none;
-background:none;
-
-font-size:20px;
-
-width:100%;
-
-outline:none;
-
-}
-
-/* Result Style */
-.result {
-    font-size: 24px;
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #E1EDF5;
+    --white-card: rgba(255,255,255,0.1);
+    --border-card: #FFFFFF;
+    --shadow-card: 0px 0px 80px rgba(0,0,0,0.18);
+    --input-bg: #EEEEEE;
+    --input-border: #8E8E8E;
+    --placeholder: #8E8E8E;
+    --label: #1E1E1E;
+    --divider: #1E1E1E;
+    --result-bg: #FFFFFF;
+    --radius-card: 20px;
+    --radius-input: 5px;
+    --gap-card: 20px;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 1280px;
+    min-height: 100vh;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 100px 200px;
+    gap: 30px;
+  }
+
+  /* ── HEADLINE ── */
+  .headline {
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    text-align: center;
+    color: #000;
+    width: 880px;
+    max-width: 100%;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    width: 100%;
+    max-width: 650px;
+    background: var(--white-card);
+    border: 3px solid var(--border-card);
+    box-shadow: var(--shadow-card);
+    border-radius: var(--radius-card);
+    padding: var(--gap-card);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-card);
+  }
+
+  /* ── CARD HEADER ── */
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .card-header svg { flex-shrink: 0; }
+  .card-label {
+    font-size: 15px;
     font-weight: 700;
-    margin-top: 10px;
+    letter-spacing: -0.05em;
+    color: var(--label);
+    line-height: 1;
+  }
+
+  /* ── FIELD ── */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+  }
+  .field-label {
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: -0.05em;
+    color: var(--label);
+    line-height: 1;
+  }
+  .field-input-wrap {
+    display: flex;
+    align-items: center;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: var(--radius-input);
+    padding: 15px;
+    gap: 10px;
+    width: 100%;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .field-input-wrap:focus-within {
+    border-color: #555;
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.07);
+  }
+  .field-icon { flex-shrink: 0; display: flex; align-items: center; }
+  .field-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: -0.05em;
     color: #1E1E1E;
-}
+    outline: none;
+    min-width: 0;
+  }
+  .field-input::placeholder { color: var(--placeholder); }
+  /* hide number arrows */
+  .field-input::-webkit-outer-spin-button,
+  .field-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .field-input[type=number] { -moz-appearance: textfield; }
 
+  /* ── FORMULA ROW ── */
+  .formula-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+  }
+  .formula-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0;
+    gap: 10px;
+  }
+  .formula-desc {
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: -0.05em;
+    color: var(--placeholder);
+    line-height: 1;
+    flex: 1;
+  }
+  .formula-result {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    color: var(--label);
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .formula-divider {
+    width: 100%;
+    height: 2px;
+    background: var(--divider);
+    border-radius: 999px;
+  }
 
+  /* ── RESULTS CARD ── */
+  .results-row {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    width: 100%;
+  }
+  .result-box {
+    flex: 1;
+    background: var(--result-bg);
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .result-title {
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: -0.05em;
+    color: var(--placeholder);
+    line-height: 1;
+  }
+  .result-value {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    color: var(--label);
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .result-value.highlight { color: #1E1E1E; }
 
+  /* ── RETAINER ROW (inside revenue card) ── */
+  /* second formula row for retainer */
+
+  /* ── RESPONSIVE ── */
+
+  /* Tablet */
+  @media (max-width: 1024px) {
+    .page {
+      padding: 60px 40px;
+    }
+    .headline {
+      font-size: 44px;
+      width: 100%;
+    }
+    .card {
+      max-width: 100%;
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 640px) {
+    .page {
+      padding: 40px 20px;
+      gap: 20px;
+    }
+    .headline {
+      font-size: 30px;
+      letter-spacing: -0.04em;
+    }
+    .card {
+      padding: 16px;
+      gap: 16px;
+    }
+    .field-label,
+    .formula-desc,
+    .formula-result { font-size: 16px; }
+    .field-input { font-size: 16px; }
+    .field-input-wrap { padding: 12px; }
+    .result-value { font-size: 30px; }
+    .result-title { font-size: 16px; }
+    .results-row { gap: 12px; }
+    .result-box { padding: 14px; gap: 6px; }
+    .card-label { font-size: 13px; }
+  }
+
+  /* Very small screens */
+  @media (max-width: 380px) {
+    .results-row { flex-direction: column; }
+    .headline { font-size: 26px; }
+  }
+
+  /* ── ANIMATED RESULT FLASH ── */
+  @keyframes flash {
+    0%   { opacity: 0.4; transform: scale(0.97); }
+    100% { opacity: 1;   transform: scale(1); }
+  }
+  .flash { animation: flash 0.2s ease-out; }
 </style>
-
 </head>
-
 <body>
+<div class="page">
 
+  <!-- HEADLINE -->
+  <h1 class="headline">What could email do for your store?</h1>
 
-<div class="desktop">
+  <!-- ── CARD 1: TRAFFIC & SIGNUPS ── -->
+  <div class="card">
+    <div class="card-header">
+      <!-- Globe icon -->
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7.5 0C3.35786 0 0 3.35786 0 7.5C0 11.6421 3.35786 15 7.5 15C11.6421 15 15 11.6421 15 7.5C15 3.35786 11.6421 0 7.5 0ZM12.2542 4.27734H10.887C10.7298 3.61778 10.5259 3.01134 10.2838 2.47518C10.7463 2.73229 11.1759 3.05517 11.5603 3.43966C11.8202 3.69952 12.0518 3.9801 12.2542 4.27734ZM13.2422 7.5C13.2422 8.00121 13.178 8.49249 13.0543 8.96484H11.1783C11.2252 8.49105 11.25 8.00136 11.25 7.5C11.25 6.99864 11.2252 6.50895 11.1783 6.03516H13.0543C13.178 6.50751 13.2422 6.99879 13.2422 7.5ZM7.5 13.2422C7.34766 13.2422 6.88336 12.9427 6.42059 12.0172C6.2289 11.6338 6.06439 11.1971 5.9298 10.7227H9.07017C8.93558 11.197 8.7711 11.6338 8.57938 12.0172C8.11664 12.9427 7.65234 13.2422 7.5 13.2422ZM5.59022 8.96484C5.53611 8.48886 5.50781 7.9972 5.50781 7.5C5.50781 7.0028 5.53611 6.51114 5.59022 6.03516H9.40978C9.46389 6.51114 9.49219 7.0028 9.49219 7.5C9.49219 7.9972 9.46389 8.48886 9.40978 8.96484H5.59022ZM1.75781 7.5C1.75781 6.99879 1.822 6.50751 1.94572 6.03516H3.82172C3.77481 6.50895 3.75 6.99864 3.75 7.5C3.75 8.00136 3.77481 8.49105 3.82172 8.96484H1.94572C1.822 8.49249 1.75781 8.00121 1.75781 7.5ZM7.5 1.75781C7.65234 1.75781 8.11664 2.05726 8.57941 2.9828C8.7711 3.36621 8.93561 3.80294 9.0702 4.27734H5.9298C6.06439 3.80297 6.22887 3.36621 6.42059 2.9828C6.88336 2.05726 7.34766 1.75781 7.5 1.75781ZM4.71618 2.47518C4.47407 3.01134 4.27022 3.61775 4.11305 4.27734H2.74585C2.94826 3.9801 3.17979 3.69952 3.43966 3.43966C3.82415 3.05517 4.2537 2.73229 4.71618 2.47518ZM2.74585 10.7227H4.11305C4.27022 11.3822 4.4741 11.9887 4.71618 12.5248C4.2537 12.2677 3.82412 11.9448 3.43966 11.5603C3.17979 11.3005 2.94823 11.0199 2.74585 10.7227ZM10.2838 12.5248C10.5259 11.9887 10.7298 11.3822 10.887 10.7227H12.2542C12.0517 11.0199 11.8202 11.3005 11.5603 11.5603C11.1758 11.9448 10.7463 12.2677 10.2838 12.5248Z" fill="#1E1E1E"/>
+      </svg>
+      <span class="card-label">TRAFFIC &amp; SIGNUPS</span>
+    </div>
 
+    <!-- Monthly Average Site Traffic -->
+    <div class="field">
+      <div class="field-label">Monthly Average Site Traffic</div>
+      <div class="field-input-wrap">
+        <input class="field-input" id="site" type="number" placeholder="e.g. 50,000 visitors" min="0">
+      </div>
+    </div>
 
-<div class="frame">
+    <!-- Popup Form CVR -->
+    <div class="field">
+      <div class="field-label">Popup Form CVR</div>
+      <div class="field-input-wrap">
+        <input class="field-input" id="popup" type="number" placeholder="e.g. 3%" step="0.01" min="0" max="100">
+        <!-- % icon -->
+        <div class="field-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.4892 15.694V14.7331C10.4892 13.962 10.6719 13.2503 11.0372 12.5979C11.409 11.9454 11.9472 11.4205 12.6517 11.0231C13.3562 10.6257 14.214 10.427 15.225 10.427C16.2622 10.427 17.1331 10.6228 17.8376 11.0142C18.5486 11.4057 19.0868 11.9276 19.4521 12.5801C19.8174 13.2325 20 13.9502 20 14.7331V15.694C20 16.465 19.8141 17.1767 19.4423 17.8292C19.077 18.4816 18.5388 19.0065 17.8278 19.4039C17.1168 19.8013 16.2492 20 15.225 20C14.2009 20 13.3366 19.8013 12.6321 19.4039C11.9276 19.0065 11.3927 18.4816 11.0274 17.8292C10.6686 17.1767 10.4892 16.465 10.4892 15.694ZM13.8943 14.7331V15.694C13.8943 16.032 13.9856 16.3671 14.1683 16.6993C14.3575 17.0255 14.7097 17.1886 15.225 17.1886C15.7665 17.1886 16.122 17.0285 16.2916 16.7082C16.4677 16.3879 16.5558 16.0498 16.5558 15.694V14.7331C16.5558 14.3772 16.4742 14.0332 16.3112 13.7011C16.1481 13.3689 15.786 13.2028 15.225 13.2028C14.7097 13.2028 14.3575 13.3689 14.1683 13.7011C13.9856 14.0332 13.8943 14.3772 13.8943 14.7331ZM0 5.2669V4.30605C0 3.52313 0.18591 2.80546 0.55773 2.15302C0.936073 1.50059 1.4775 0.978648 2.182 0.587189C2.8865 0.19573 3.73777 0 4.73581 0C5.77299 0 6.64384 0.19573 7.34834 0.587189C8.05936 0.978648 8.59752 1.50059 8.96282 2.15302C9.32812 2.80546 9.51076 3.52313 9.51076 4.30605V5.2669C9.51076 6.04982 9.32485 6.76453 8.95303 7.41103C8.58774 8.05753 8.04958 8.57355 7.33855 8.95908C6.62753 9.3446 5.75995 9.53737 4.73581 9.53737C3.71168 9.53737 2.84736 9.34164 2.14286 8.95018C1.43836 8.55872 0.903457 8.03974 0.53816 7.39324C0.179387 6.74674 0 6.03796 0 5.2669ZM3.44423 4.30605V5.2669C3.44423 5.62278 3.53555 5.96085 3.7182 6.28114C3.90085 6.60142 4.24005 6.76157 4.73581 6.76157C5.27723 6.76157 5.63275 6.60142 5.80235 6.28114C5.97847 5.96085 6.06654 5.62278 6.06654 5.2669V4.30605C6.06654 3.95018 5.985 3.60617 5.82192 3.27402C5.65884 2.94187 5.2968 2.7758 4.73581 2.7758C4.22048 2.7758 3.87476 2.94781 3.69863 3.29182C3.52903 3.62989 3.44423 3.96797 3.44423 4.30605ZM1.66341 19.1103L15.4403 0.88968H18.2192L4.44227 19.1103H1.66341Z" fill="#1E1E1E"/>
+          </svg>
+        </div>
+      </div>
+    </div>
 
+    <!-- Formula: signups = site * popup -->
+    <div class="formula-wrap">
+      <div class="formula-row">
+        <span class="formula-desc">Est. monthly email signups</span>
+        <span class="formula-result" id="result-signups">—</span>
+      </div>
+      <div class="formula-divider"></div>
+    </div>
+  </div>
 
-<div class="headline">
+  <!-- ── CARD 2: REVENUE ── -->
+  <div class="card">
+    <div class="card-header">
+      <!-- Bar chart icon -->
+      <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 10.6664C1 10.1996 1 9.96626 1.09082 9.78801C1.17072 9.63118 1.29821 9.50376 1.45501 9.42385C1.63327 9.33301 1.86662 9.33301 2.33333 9.33301H3C3.46671 9.33301 3.70007 9.33301 3.87832 9.42385C4.03512 9.50376 4.16261 9.63118 4.24251 9.78801C4.33333 9.96626 4.33333 10.1996 4.33333 10.6664V14.6664C4.33333 15.1331 4.33333 15.3665 4.24251 15.5447C4.16261 15.7015 4.03512 15.829 3.87832 15.9089C3.70007 15.9997 3.46671 15.9997 3 15.9997H2.33333C1.86662 15.9997 1.63327 15.9997 1.45501 15.9089C1.29821 15.829 1.17072 15.7015 1.09082 15.5447C1 15.3665 1 15.1331 1 14.6664V10.6664Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M7.33398 2.33333C7.33398 1.86662 7.33398 1.63327 7.42482 1.45501C7.50473 1.29821 7.63215 1.17072 7.78898 1.09082C7.96723 1 8.20057 1 8.66732 1H9.33398C9.80073 1 10.0341 1 10.2123 1.09082C10.3692 1.17072 10.4966 1.29821 10.5765 1.45501C10.6674 1.63327 10.6674 1.86662 10.6674 2.33333V14.6667C10.6674 15.1334 10.6674 15.3668 10.5765 15.545C10.4966 15.7018 10.3692 15.8293 10.2123 15.9092C10.0341 16 9.80073 16 9.33398 16H8.66732C8.20057 16 7.96723 16 7.78898 15.9092C7.63215 15.8293 7.50473 15.7018 7.42482 15.545C7.33398 15.3668 7.33398 15.1334 7.33398 14.6667V2.33333Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M13.668 7.33333C13.668 6.86658 13.668 6.63327 13.7588 6.45501C13.8387 6.29821 13.9661 6.17072 14.123 6.09082C14.3012 6 14.5346 6 15.0013 6H15.668C16.1347 6 16.3681 6 16.5463 6.09082C16.7031 6.17072 16.8306 6.29821 16.9105 6.45501C17.0013 6.63327 17.0013 6.86658 17.0013 7.33333V14.6667C17.0013 15.1334 17.0013 15.3668 16.9105 15.545C16.8306 15.7018 16.7031 15.8293 16.5463 15.9092C16.3681 16 16.1347 16 15.668 16H15.0013C14.5346 16 14.3012 16 14.123 15.9092C13.9661 15.8293 13.8387 15.7018 13.7588 15.545C13.668 15.3668 13.668 15.1334 13.668 14.6667V7.33333Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="card-label">REVENUE</span>
+    </div>
 
-Welcome Flow Revenue ROI Calculator
+    <!-- Welcome Flow CVR -->
+    <div class="field">
+      <div class="field-label">Welcome Flow CVR</div>
+      <div class="field-input-wrap">
+        <input class="field-input" id="welcome" type="number" placeholder="e.g. 5%" step="0.01" min="0" max="100">
+        <div class="field-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.4892 15.694V14.7331C10.4892 13.962 10.6719 13.2503 11.0372 12.5979C11.409 11.9454 11.9472 11.4205 12.6517 11.0231C13.3562 10.6257 14.214 10.427 15.225 10.427C16.2622 10.427 17.1331 10.6228 17.8376 11.0142C18.5486 11.4057 19.0868 11.9276 19.4521 12.5801C19.8174 13.2325 20 13.9502 20 14.7331V15.694C20 16.465 19.8141 17.1767 19.4423 17.8292C19.077 18.4816 18.5388 19.0065 17.8278 19.4039C17.1168 19.8013 16.2492 20 15.225 20C14.2009 20 13.3366 19.8013 12.6321 19.4039C11.9276 19.0065 11.3927 18.4816 11.0274 17.8292C10.6686 17.1767 10.4892 16.465 10.4892 15.694ZM13.8943 14.7331V15.694C13.8943 16.032 13.9856 16.3671 14.1683 16.6993C14.3575 17.0255 14.7097 17.1886 15.225 17.1886C15.7665 17.1886 16.122 17.0285 16.2916 16.7082C16.4677 16.3879 16.5558 16.0498 16.5558 15.694V14.7331C16.5558 14.3772 16.4742 14.0332 16.3112 13.7011C16.1481 13.3689 15.786 13.2028 15.225 13.2028C14.7097 13.2028 14.3575 13.3689 14.1683 13.7011C13.9856 14.0332 13.8943 14.3772 13.8943 14.7331ZM0 5.2669V4.30605C0 3.52313 0.18591 2.80546 0.55773 2.15302C0.936073 1.50059 1.4775 0.978648 2.182 0.587189C2.8865 0.19573 3.73777 0 4.73581 0C5.77299 0 6.64384 0.19573 7.34834 0.587189C8.05936 0.978648 8.59752 1.50059 8.96282 2.15302C9.32812 2.80546 9.51076 3.52313 9.51076 4.30605V5.2669C9.51076 6.04982 9.32485 6.76453 8.95303 7.41103C8.58774 8.05753 8.04958 8.57355 7.33855 8.95908C6.62753 9.3446 5.75995 9.53737 4.73581 9.53737C3.71168 9.53737 2.84736 9.34164 2.14286 8.95018C1.43836 8.55872 0.903457 8.03974 0.53816 7.39324C0.179387 6.74674 0 6.03796 0 5.2669ZM3.44423 4.30605V5.2669C3.44423 5.62278 3.53555 5.96085 3.7182 6.28114C3.90085 6.60142 4.24005 6.76157 4.73581 6.76157C5.27723 6.76157 5.63275 6.60142 5.80235 6.28114C5.97847 5.96085 6.06654 5.62278 6.06654 5.2669V4.30605C6.06654 3.95018 5.985 3.60617 5.82192 3.27402C5.65884 2.94187 5.2968 2.7758 4.73581 2.7758C4.22048 2.7758 3.87476 2.94781 3.69863 3.29182C3.52903 3.62989 3.44423 3.96797 3.44423 4.30605ZM1.66341 19.1103L15.4403 0.88968H18.2192L4.44227 19.1103H1.66341Z" fill="#1E1E1E"/>
+          </svg>
+        </div>
+      </div>
+    </div>
 
-</div>
+    <!-- Average Order Value -->
+    <div class="field">
+      <div class="field-label">Average Order Value</div>
+      <div class="field-input-wrap">
+        <!-- $ icon -->
+        <div class="field-icon">
+          <svg width="12" height="19" viewBox="0 0 12 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5.26989 18.1818V0H6.43466V18.1818H5.26989ZM8.35938 6.00142C8.30256 5.4285 8.05871 4.98343 7.62784 4.66619C7.19697 4.34896 6.61222 4.19034 5.87358 4.19034C5.37169 4.19034 4.94792 4.26136 4.60227 4.40341C4.25663 4.54072 3.99148 4.73248 3.80682 4.97869C3.62689 5.22491 3.53693 5.50426 3.53693 5.81676C3.52746 6.07718 3.58191 6.30445 3.70028 6.49858C3.82339 6.69271 3.99148 6.8608 4.20455 7.00284C4.41761 7.14015 4.66383 7.26089 4.94318 7.36506C5.22254 7.46449 5.52083 7.54972 5.83807 7.62074L7.14489 7.93324C7.77936 8.07528 8.36174 8.26468 8.89205 8.50142C9.42235 8.73816 9.88163 9.02936 10.2699 9.375C10.6581 9.72065 10.9588 10.1278 11.1719 10.5966C11.3897 11.0653 11.5009 11.6027 11.5057 12.2088C11.5009 13.099 11.2737 13.8707 10.8239 14.5241C10.3788 15.1728 9.73485 15.6771 8.89205 16.0369C8.05398 16.392 7.04309 16.5696 5.85938 16.5696C4.68513 16.5696 3.66241 16.3897 2.79119 16.0298C1.92472 15.67 1.24763 15.1373 0.759943 14.4318C0.276989 13.7216 0.0236743 12.8433 0 11.7969H2.97585C3.009 12.2846 3.14867 12.6918 3.39489 13.0185C3.64583 13.3404 3.97964 13.5843 4.39631 13.75C4.81771 13.911 5.29356 13.9915 5.82386 13.9915C6.3447 13.9915 6.79688 13.9157 7.1804 13.7642C7.56866 13.6127 7.86932 13.402 8.08239 13.1321C8.29546 12.8622 8.40199 12.5521 8.40199 12.2017C8.40199 11.875 8.30492 11.6004 8.1108 11.3778C7.9214 11.1553 7.64205 10.9659 7.27273 10.8097C6.90814 10.6534 6.4607 10.5114 5.9304 10.3835L4.34659 9.9858C3.12027 9.6875 2.15199 9.22112 1.44176 8.58665C0.731534 7.95218 0.378788 7.09754 0.383523 6.02273C0.378788 5.14205 0.613163 4.37263 1.08665 3.71449C1.56487 3.05635 2.22064 2.54261 3.05398 2.1733C3.88731 1.80398 4.83428 1.61932 5.89489 1.61932C6.97443 1.61932 7.91667 1.80398 8.72159 2.1733C9.53125 2.54261 10.161 3.05635 10.6108 3.71449C11.0606 4.37263 11.2926 5.13494 11.3068 6.00142H8.35938Z" fill="#1E1E1E"/>
+          </svg>
+        </div>
+        <input class="field-input" id="aov" type="number" placeholder="e.g. 75" step="0.01" min="0">
+      </div>
+    </div>
 
+    <!-- Formula: revenue = site * popup * welcome * aov -->
+    <div class="formula-wrap">
+      <div class="formula-row">
+        <span class="formula-desc">Est. monthly email revenue</span>
+        <span class="formula-result" id="result-revenue">—</span>
+      </div>
+      <div class="formula-divider"></div>
+    </div>
 
+    <!-- Retainer (fixed) -->
+    <div class="formula-wrap">
+      <div class="formula-row">
+        <span class="formula-desc">Monthly retainer</span>
+        <span class="formula-result" id="result-retainer">FIXED</span>
+      </div>
+      <div class="formula-divider"></div>
+    </div>
+  </div>
 
-<div class="card">
+  <!-- ── CARD 3: RESULTS ── -->
+  <div class="card">
+    <div class="results-row">
+      <div class="result-box">
+        <div class="result-title">NEW REVENUE</div>
+        <div class="result-value" id="display-revenue">—</div>
+      </div>
+      <div class="result-box">
+        <div class="result-title">ROI</div>
+        <div class="result-value" id="display-roi">—</div>
+      </div>
+    </div>
+  </div>
 
-
-<div class="titleRow">
-
-<svg width="15" height="15" viewBox="0 0 15 15">
-<path d="M7.5 0C3.35786 0 0 3.35786 0 7.5C0 11.6421 3.35786 15 7.5 15C11.6421 15 15 11.6421 15 7.5C15 3.35786 11.6421 0 7.5 0Z" fill="#1E1E1E"/>
-</svg>
-
-<div class="title">
-
-TRAFFIC & SIGNUPS
-
-</div>
-
-</div>
-
-
-
-<div class="inputBlock">
-
-<div class="label">
-
-Monthly Average Site Traffic
-
-</div>
-
-<div class="inputWrap">
-
-<input type="number" id="traffic" placeholder="0" oninput="calculate()">
-
-</div>
-
-</div>
-
-
-
-<div class="inputBlock">
-
-<div class="label">
-
-Popup Form CVR (%)
-
-</div>
-
-<div class="inputWrap">
-
-<input type="number" id="cvr" placeholder="0" oninput="calculate()">
-
-</div>
-
-</div>
-
-<div class="result">
-    New Monthly Signups: <span id="signupCount">0</span>
-</div>
-
-
-</div>
-
-</div>
 </div>
 
 <script>
-function calculate() {
-    const traffic = document.getElementById('traffic').value;
-    const cvr = document.getElementById('cvr').value;
-    const display = document.getElementById('signupCount');
+  // ── Hidden retainer field logic ──
+  // From Figma: retainer is "FIXED" — we'll make it editable but pre-filled
+  // by adding a subtle input to the revenue card after aov
 
-    if (traffic && cvr) {
-        // Simple calculation: Traffic * (CVR / 100)
-        const total = (parseFloat(traffic) * (parseFloat(cvr) / 100)).toFixed(0);
-        display.innerText = Number(total).toLocaleString();
-    } else {
-        display.innerText = "0";
-    }
-}
+  // Insert retainer input into the retainer formula row
+  const retainerResult = document.getElementById('result-retainer');
+  // Make retainer editable inline
+  const retainerInput = document.createElement('input');
+  retainerInput.type = 'number';
+  retainerInput.id = 'retainer';
+  retainerInput.placeholder = 'Retainer $';
+  retainerInput.min = '0';
+  retainerInput.style.cssText = `
+    border: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    color: #1E1E1E;
+    outline: none;
+    text-align: right;
+    width: 120px;
+    min-width: 0;
+  `;
+  retainerInput.className = 'field-input';
+
+  // Replace the static "FIXED" span with an input
+  const retainerRow = retainerResult.parentElement;
+  retainerRow.removeChild(retainerResult);
+  retainerRow.appendChild(retainerInput);
+  retainerInput.placeholder = 'Enter $';
+
+  // ── Calculation ──
+  function fmt(n) {
+    if (!isFinite(n) || isNaN(n)) return '—';
+    return n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+  }
+  function fmtCurrency(n) {
+    if (!isFinite(n) || isNaN(n)) return '—';
+    return '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+  }
+  function fmtROI(n) {
+    if (!isFinite(n) || isNaN(n) || n <= 0) return '—';
+    return n.toFixed(1) + 'x';
+  }
+
+  function flash(el) {
+    el.classList.remove('flash');
+    void el.offsetWidth; // reflow
+    el.classList.add('flash');
+  }
+
+  function calculate() {
+    const site    = parseFloat(document.getElementById('site').value)    || 0;
+    const popup   = parseFloat(document.getElementById('popup').value)   || 0;
+    const welcome = parseFloat(document.getElementById('welcome').value) || 0;
+    const aov     = parseFloat(document.getElementById('aov').value)     || 0;
+    const retainer= parseFloat(retainerInput.value)                      || 0;
+
+    const signups = site * (popup / 100);
+    const revenue = signups * (welcome / 100) * aov;
+    const roi     = retainer > 0 ? revenue / retainer : NaN;
+
+    const sigEl  = document.getElementById('result-signups');
+    const revEl  = document.getElementById('result-revenue');
+    const dRevEl = document.getElementById('display-revenue');
+    const dRoiEl = document.getElementById('display-roi');
+
+    const sigVal  = site && popup   ? fmt(signups)          : '—';
+    const revVal  = site && popup && welcome && aov ? fmtCurrency(revenue) : '—';
+    const roiVal  = site && popup && welcome && aov && retainer ? fmtROI(roi) : '—';
+
+    if (sigEl.textContent !== sigVal)  { sigEl.textContent = sigVal;  flash(sigEl); }
+    if (revEl.textContent !== revVal)  { revEl.textContent = revVal;  flash(revEl); }
+    if (dRevEl.textContent !== revVal) { dRevEl.textContent = revVal; flash(dRevEl); }
+    if (dRoiEl.textContent !== roiVal) { dRoiEl.textContent = roiVal; flash(dRoiEl); }
+  }
+
+  // Attach to all inputs
+  ['site','popup','welcome','aov'].forEach(id => {
+    document.getElementById(id).addEventListener('input', calculate);
+  });
+  retainerInput.addEventListener('input', calculate);
 </script>
-
 </body>
 </html>
